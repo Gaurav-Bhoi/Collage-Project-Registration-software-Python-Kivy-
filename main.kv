@@ -1,0 +1,409 @@
+#:import utils kivy.utils
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import FileChooser kivy.uix.filechooser.FileChooser
+
+<Registration_Screen_Label@Label>:
+    font_size: 20
+    color: utils.get_color_from_hex('#FF7F00')
+    text_size: self.size
+    halign: 'left'
+    valign: 'center'
+    size_hint_y: None
+    height: 40
+
+<Registration_Screen_TextInput@TextInput>:
+    font_size: 17
+    background_color: (3, 3, 3, 1)
+    size_hint_y: None
+    height: 35
+
+<Gender_CheckBox@CheckBox>:
+    group: 'gender'
+    color: (0, 0, 0, 1)
+
+<SubmitButton@Button>:
+    background_color: utils.get_color_from_hex('#FF7F00')
+    background_normal: ''
+    background_down: ''
+    on_state: self.background_color = {'down': utils.get_color_from_hex('#FA8072'), 'normal': utils.get_color_from_hex('#FF7F00')} [self.state]
+
+<Menu_Button@Button>:
+    background_normal: ''
+    size_hint_y: None
+    height: 50
+    color: utils.get_color_from_hex('#FF7F00')
+    font_size: 17
+
+<Profile_Button_Label_Config@Label>:
+    color: (0, 0, 0, 1)
+    font_size: 17
+    text_size: self.size
+    valign: 'middle'
+    size: self.texture_size
+    halign: 'center'
+
+<Profile_labels@Label>:
+    font_size: 17
+    color: (0, 0, 0, 1)
+    text_size: self.size
+    halign: 'left'
+    valign: 'middle'
+    padding: (20, 20)
+
+<Box>:
+    id: box
+    padding: [300, 80]
+    spacing: 20
+
+    canvas.before:
+        Rectangle:
+            size: root.size
+            source: 'bricks_background.png'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        canvas.before:
+            Color:
+                rgba: (3, 3, 3, 1)
+
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        BoxLayout:
+            size_hint_y:.08
+
+            Menu_Button:
+                id: employee_registration_screen_button
+                text: 'Register New Employee'
+                on_release:
+                    screen_manager.current = 'registration screen'
+                    screen_manager.transition.direction = 'right'
+                    app.root.ids.screen_manager_2.current = 'empty_screen'
+                    root.on_kv_post(box)
+
+            Menu_Button:
+                id: employee_database_screen_button
+                text: 'Employee Database'
+                on_release:
+                    screen_manager.current = 'database screen'
+                    screen_manager.transition.direction = 'left'
+                    root.on_kv_post(box)
+
+        ScreenManager:
+            id: screen_manager
+
+            Registration_Screen:
+                id: registration_screen
+                name: 'registration screen'
+
+            DataBase_Screen:
+                id: dataBase_screen
+                name: 'database screen'
+
+    BoxLayout:
+
+        ScreenManager:
+            id:screen_manager_2
+            transition: NoTransition()
+
+            Empty_Screen:
+                id: empty_screen
+                name: 'empty_screen'
+
+            ImageSelection:
+                id: imageSelection
+                name: 'imageSelection'
+
+            Profile_Screen:
+                id: profile_screen
+                name: 'profile_screen'
+
+<Empty_Screen@Screen>:
+
+<Registration_Screen@Screen>:
+    employee_name: employee_name
+    employee_id: employee_id
+    gender_male: gender_male
+    gender_female: gender_female
+    address: address
+    phone_no: phone_no
+    email: email
+    designation: designation
+    password: password
+    confirm_password: confirm_password
+
+    ScrollView:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            height: self.minimum_height
+            width: self.parent.width
+            padding: [30, 17, 30, 17]
+
+            Registration_Screen_Label:
+                id: name_label
+                text: 'Name'
+
+            Registration_Screen_TextInput:
+                id: employee_name
+                hint_text: 'Name as per marksheet'
+
+            Registration_Screen_Label:
+                id: employee_id_label
+                text: 'Employee ID'
+
+            Registration_Screen_TextInput:
+                id: employee_id
+                hint_text: 'Enter your ID alloted by Company'
+
+            BoxLayout:
+                size_hint_y: None
+                height: self.minimum_height
+                padding: [0, 10, 0, 0]
+
+                Registration_Screen_Label:
+                    id: gender_label
+                    text: 'Gender'
+
+                Gender_CheckBox:
+                    id: gender_male
+
+                Registration_Screen_Label:
+                    id: gender_male_label
+                    text: 'male'
+
+                Gender_CheckBox:
+                    id: gender_female
+
+                Registration_Screen_Label:
+                    id: gender_female_label
+                    text: 'female'
+
+            Registration_Screen_Label:
+                id: address_label
+                text: 'Adrress'
+
+            Registration_Screen_TextInput:
+                id: address
+                hint_text: 'Enter your permanent Address'
+                height: 150
+
+            Registration_Screen_Label:
+                id: phone_no_label
+                text: 'Phone No'
+
+            Registration_Screen_TextInput:
+                id: phone_no
+                hint_text: 'Enter Your personal contact no'
+                input_filter: 'int'
+
+            Registration_Screen_Label:
+                id: email_label
+                text: 'Email'
+
+            Registration_Screen_TextInput:
+                id: email
+                hint_text: 'Enter Your personal Email address'
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                padding: [0, 10, 0, 0]
+
+                Registration_Screen_Label:
+                    id: designation_label
+                    text: 'Designation In Company'
+
+                Spinner:
+                    id: designation
+                    text: 'select your designation'
+                    values: ['newtork enginner', 'software engineer', 'project manager', 'program manager', 'H.R. Manager', 'CEO/MD', 'PHP Devoloper', 'Android Devoloper', 'General Manager', 'Internet Marketing Head', 'Business Development Manager']
+
+            Registration_Screen_Label:
+                id: password_label
+                text: 'Password'
+
+            Registration_Screen_TextInput:
+                id: password
+                hint_text: 'Enter password to use company application'
+                password: True
+                password_mask: '*'
+
+            Registration_Screen_Label:
+                id: confirm_password_label
+                text: 'comfirm password'
+
+            Registration_Screen_TextInput:
+                id: confirm_password
+                hint_text: 'please confirm your password'
+                password: True
+                password_mask: '*'
+
+            BoxLayout:
+                padding: 15
+                spacing: 10
+                size_hint_y: None
+                height: 75
+
+                SubmitButton:
+                    id: add_face_button
+                    text: 'Add Face'
+                    on_release:
+                        app.root.ids.screen_manager_2.current = 'imageSelection'
+
+
+                SubmitButton:
+                    id: submit_button
+                    text: 'Submit'
+                    on_release: root.send_data_to_db()
+
+<DataBase_Screen@Screen>:
+    profiles_in_boxlayout: profiles_in_boxlayout
+
+    ScrollView:
+
+        canvas.before:
+            Color:
+                rgba: (1, 1, 1, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            id: profiles_in_boxlayout
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+
+<ImageSelection@Screen>:
+    imageChooser: imageChooser
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        padding: 10
+
+        canvas.before:
+            Color:
+                rgba: (.5, .5, .5, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            id: img
+            source: ''
+
+        FileChooserIconView:
+            id: imageChooser
+            filters: ['*.png', '*.jpg', '*.jpeg']
+            rootpath: 'Images'
+            show_hidden: True
+            on_selection:
+                img.source = self.selection[0]
+                confirmButton.disabled = False
+
+        Button:
+            id: confirmButton
+            size_hint_y: .15
+            text: 'Confirm'
+            on_release: root.encodeImage()
+
+
+<Profile_Screen@Screen> :
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: (1, 1, 1, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: 'dummy-person.png'
+            size_hint_y: .5
+
+        GridLayout:
+            cols: 2
+
+            Profile_labels:
+                text: 'Name'
+            Profile_labels:
+                id: name
+
+            Profile_labels:
+                text: 'Gender'
+            Profile_labels:
+                id: gender
+
+
+            Profile_labels:
+                text: 'Email'
+            Profile_labels:
+                id: email
+
+
+            Profile_labels:
+                text: 'Address'
+            Profile_labels:
+                id: address
+
+            Profile_labels:
+                text: 'Contact no'
+            Profile_labels:
+                id: contact_no
+
+            Profile_labels:
+                text: 'Designation'
+            Profile_labels:
+                id: designation
+
+<Profile_Button> :
+    size_hint_y: None
+    height: 80
+    padding: 10
+    background_color: (2, 2, 2, 1)
+    background_normal: ''
+    background_down: ''
+    on_state: self.background_color = {'down': utils.get_color_from_hex('#FFE4C4'), 'normal': (3, 3, 3, 1)} [self.state]
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Image:
+            source: 'dummy-person.png'
+            size_hint_x: .3
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Profile_Button_Label_Config:
+                text: root.label_1
+            Profile_Button_Label_Config:
+                text: root.label_2
+
+<Popup_Window>:
+    message: message
+
+    size_hint: (.35, .3)
+
+    BoxLayout:
+        orientation: 'vertical'
+        title: 'testing'
+        padding: 10
+        spacing: 10
+
+        Label:
+            id: message
+            font_size: 16
+            text: 'default text'
+
+        Button:
+            size_hint: (.3, .5)
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            text: 'Okey'
+            on_release:
+                root.dismiss()
